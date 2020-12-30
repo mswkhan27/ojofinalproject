@@ -6,7 +6,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
+<title>OJO Smart Surveillance Detection System</title>
 
 
       <style>
@@ -116,11 +116,59 @@
             color:white !important;
             background-color:#052240;
         }
+        .dropWrap{
 
+            margin-bottom: 20px;
+        }
+        .dropbtn {
+
+          background-color: #68FE86;
+          color: #0F233B;
+          padding-left: 10px;
+          padding-right: 10px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          font-size: 16px;
+          border: dashed;
+
+        }
+
+        .dropdown {
+
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+              margin-left:5px !important;
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 4px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown-content a:hover {background-color: #68FE86;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .dropdown:hover .dropbtn {background-color: #68FE86;}
+
+        .reBtn{
+            color:white;
+            background-color:red !important;
+        }
       </style>
   </head>
   <body>
-
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -146,91 +194,85 @@
               <span>Detected Activity Logs</span>
 
            </a>
-           <a href="logout" class="navbar-link">
-          <img src="{{  url_for('static',filename='images/qq.png') }}" width="34" height="34">
+            <div class="dropWrap">
+                <div class="dropdown">
+                  <button class="dropbtn"><span><img src="{{  url_for('static',filename='images/prof.png') }}" width="34" height="34"></span><strong> {{ user['name'] }}</strong></button>
+                      <div class="dropdown-content">
+                        <a href="updateDetails">
+                            <img src="{{  url_for('static',filename='images/updateicon.png') }}" width="14" height="14">
+                            Update Info</a>
+                        <a href="logout">
+                         <img src="{{  url_for('static',filename='images/qq.png') }}" width="14" height="14">
+                            <span>Sign out</span>
+
+                          </a>
+                      </div>
+                </div>
+            </div>
 
 
-          </a>
 
 
       </p>
 
   </div>
 </nav>
+
+
   <div class="container">
       <center>
 
           <h3 style="color:white">
               Dashboard
           </h3>
+        <form  id="remBtnId" name="removeCamForm" style="width:200px; display: none">
+                      <button class="btn btn-md btn-primary btn-block btnSub reBtn" type="submit">Remove Camera</button>
+                    </form>
+   {% if cam['enabled']=="true" %}
+       <form  id="remBtnId" name="removeCamForm" style="width:200px;">
+                      <button class="btn btn-md btn-primary btn-block btnSub reBtn" type="submit">Remove Camera</button>
+                    </form>
 
-
+       {% endif %}
           <div class="row r1">
-              <div class="col-md-6" >
-                    <!-- <a href ="video_feed"> -->
 
-                      <div class="viewCam" id="view1">
 
-                          <div class="AddCamOptions" id="option1Cam">
+                        <div class="viewCam" >
+
+                          {% if cam['enabled']=="true" %}
+
+                                <img class="videoFeed1" src="video_feed" style="border:0px #ffffff none;"
+                                 name="myiFrame" height="100%" width="100%" >
+
+                              </div>
+
+                            {% else %}
+                               <div class="viewCam" id="view1">
+
+                               <div class="AddCamOptions" id="option1Cam">
                                <img src="{{  url_for('static',filename='images/green.png') }}" width="209" height="159"><br>
-                          <h5>Add Camera</h5>
-                          </div>
-                           <div class="form-popup" id="myForm1" style="background-color: #68FE86" >
-                               <a href="dashboard" class="cancel" id="cancelButton1">×</a>
-                                  <form class="form-container">
-                                    <center><input type="text" placeholder="Add Camera IP" name="ip1" required></center>
-
-                                    <button type="submit"  onclick="addCam1()" class="btn" id="add1">Add</button>
-
-                                  </form>
-                                </div>
-                                <div id="cover1" >
-                                </div>
-
-                      </div>
+                                  <h5>Add Camera</h5>
+                                  </div>
 
 
-                <button id="takeActionBtn" style="display:none" >{{ alert }}</button>
+                                 <div class="form-popup" id="myForm1" style="background-color: #68FE86" >
+                                    <a href="dashboard" class="cancel" id="cancelButton1">×</a>
+
+                                      <form class="form-container" name="addIpForm">
+                                          <p id="feedback1" style="display:none;color:red">Invalid Value</p>
+                                        <center><input type="text" placeholder="Add Camera IP" name="ip1" id="inVal1" required ></center>
+
+                                        <button type="submit"  class="btn" id="add1">Add</button>
+
+                                      </form>
+                                    </div>
+
+                                 </div>
+                            {% endif %}
                      <!-- </a> -->
-              </div>
-
-               <div class="col-md-6">
-                 <!-- <a href ="video_feed"> -->
-
-                      <div class="viewCam" id="view2">
-                          <div class="AddCamOptions" id="option2Cam">
-                              <img src="{{  url_for('static',filename='images/green.png') }}" width="209" height="159"><br>
-                              <h5>Add Camera</h5>
-
-
-                          </div>
-                            <div class="form-popup" id="myForm2" style="background-color: #68FE86" >
-                               <a href="dashboard" class="cancel" id="cancelButton2" onclick="closeForm()">×</a>
-                                  <form class="form-container">
-                                    <center><input type="text" placeholder="Add Camera IP" name="ip2" required></center>
-
-                                    <button type="submit"  onclick="addCam2()" class="btn" id="add2">Add</button>
-
-                                  </form>
-                                </div>
-                                <div id="cover2" >
-                                </div>
-
-
-
-
-                      </div>
-
-
-
-                  <!-- </a> -->
-
-              </div>
-
-
-
           </div>
-      </center>
+
+
 
   </div>
 
@@ -248,18 +290,80 @@
 
 
 $('#view1').click(function(){
+
            $('#option1Cam').hide();
            document.getElementById("myForm1").style.display = "block";
-           document.getElementById("cover1").style.display = "block";
+
 
         });
 
-function addCam1() {
-    var video = ' <iframe class="videoFeed1" src="video_feed" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="100%"  width="540px" allowfullscreen></iframe>';
-    $('#option1Cam').hide();
-    $('#view1').html(video);
-    $('#view1').css('border', 'none');
-}
+
+
+$('form[name="addIpForm"]').submit(function (e){
+   var $form=$(this);
+   var name=$('input[name="ip1"]');
+   var $error=$form.find(".error");
+   var data=$form.serialize();
+
+    var video = ' <img class="videoFeed1" id="stream1" src="video_feed" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="100%"  width="540px" allowfullscreen></img>';
+        $('#myForm1').hide();
+
+        $('#view1').html(video);
+        $('#view1').css('border', 'none');
+
+
+   $.ajax({
+       url:"enableCam",
+       method:"POST",
+       data:data,
+
+       success:function (resp){
+         $('#remBtnId').css('display', 'block');
+           console.log(resp);
+       },
+       error:function(resp){
+           var errVal='<p>Invalid Value</p>';
+           $('#feedback1').html(errVal);
+
+           console.log(resp);
+       }
+
+   });
+
+
+e.preventDefault();
+
+});
+
+
+$('form[name="removeCamForm"]').submit(function (e){
+   var $form=$(this);
+   var $error=$form.find(".error");
+   var data=$form.serialize();
+
+
+
+   $.ajax({
+       url:"disableCam",
+       method:"POST",
+       data:data,
+       success:function (resp){
+            window.location.reload();
+           console.log(resp);
+       },
+       error:function(resp){
+           console.log(resp);
+       }
+
+   });
+
+
+e.preventDefault();
+
+});
+
+
+
 
 $('#view2').click(function(){
 
@@ -270,7 +374,7 @@ $('#view2').click(function(){
         });
 
 function addCam2() {
-    var video = ' <iframe class="videoFeed1" src="video_feed" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="100%"  width="540px" allowfullscreen></iframe>';
+    var video = ' <img class="videoFeed1" src="video_feed" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="100%"  width="540px" allowfullscreen></iframe>';
     $('#option2Cam').hide();
     $('#view2').html(video);
     $('#view2').css('border', 'none');
@@ -318,10 +422,6 @@ function generateThumbnail(i) {
 }
 */
   </script>
-
-
-
-
 
   </body>
 </html>

@@ -128,7 +128,51 @@
         .f1{margin-bottom: 10px;
              border-radius: 50px !important;
         }
+ .dropWrap{
 
+            margin-bottom: 20px;
+        }
+        .dropbtn {
+
+          background-color: #68FE86;
+          color: #0F233B;
+          padding-left: 10px;
+          padding-right: 10px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          font-size: 16px;
+          border: dashed;
+
+        }
+
+        .dropdown {
+
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+            margin-left:5px !important;
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 4px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown-content a:hover {background-color: #68FE86;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .dropdown:hover .dropbtn {background-color: #68FE86;}
       </style>
   </head>
   <body>
@@ -141,27 +185,22 @@
       </a>
     </div>
       <p class="navbar-text navbar-right">
-           <a href="{{  url_for('evaluate')}}" class="navbar-link">
-          <img src="{{  url_for('static',filename='images/ee.png') }}" width="34" height="34">
-              <span>Video Evaluation</span>
-           <a href="#" class="navbar-link" >
-          <img src="{{  url_for('static',filename='images/staffLogIcon.png') }}" width="24" height="34">
-              <span>Staff Logs</span>
-          </a>
-          <a href="#" class="navbar-link" >
-          <img src="{{  url_for('static',filename='images/admin.png') }}"  width="34" height="34">
-              <span>Add/Remove Admin</span>
-          </a>
-           <a href="#" class="navbar-link">
-          <img src="{{  url_for('static',filename='images/as.png') }}"  width="34" height="34">
-              <span>Detected Activity Logs</span>
 
-           </a>
-           <a href="logout" class="navbar-link">
-          <img src="{{  url_for('static',filename='images/qq.png') }}" width="34" height="34">
+          <div class="dropWrap" style="float: right">
+                <div class="dropdown">
+                  <button class="dropbtn"><span><img src="{{  url_for('static',filename='images/prof.png') }}" width="34" height="34"></span><strong> {{ user['name'] }}</strong></button>
+                      <div class="dropdown-content">
+                        <a href="updateDetails">
+                            <img src="{{  url_for('static',filename='images/updateicon.png') }}" width="14" height="14">
+                            Update Info</a>
+                        <a href="logout">
+                         <img src="{{  url_for('static',filename='images/qq.png') }}" width="14" height="14">
+                            <span>Sign out</span>
 
-
-          </a>
+                          </a>
+                      </div>
+                </div>
+            </div>
 
 
       </p>
@@ -180,43 +219,32 @@
 <div class="subContainer" style="width:250px">
 
           <p>
-           <form class="form-mem-update" action="{{ url_for("updateit") }}">
+           <form class="form-mem-update1" method="POST" >
 
-
-  <form name="rem-mem-form" method="GET|POST" action="{{ url_for("remove") }}">
             <h3 style="color:white">
                       <b>Update Info</b>
                   </h3>
                    <center>
                    <input type="text" id="fullName" name="name" class="form-control f1" placeholder="Full Name"   value="{{ user['name'] }}" required >
-                   <input type="text" id="email" name="email" class="form-control f1" placeholder="Email" value="{{ user['email'] }}"  required>
+                   <input type="email" id="email" name="email" class="form-control f1" placeholder="Email" value="{{ user['email'] }}"  required>
 
-                       <input type="text" id="username" name="username" class="form-control f1" placeholder="Username" value="{{ user['username'] }}"  required>
+                       <input id="username" name="username" class="form-control f1" placeholder="Username" value="{{ user['username'] }}"  required>
 
-                       <input type="password" id="pass" name="pass" class="form-control f1" placeholder="Password" value="{{ user['password'] }}"  required>
+                       <input type="password" id="pass" name="password" class="form-control f1" placeholder="Password" value="{{ user['password'] }}"  required>
 
-                   <select  id="role" name="role" class="form-control f1">
+                        <p class="form-control f1" >{{ user['role'] }}</p>
 
-                        {% if user['role']=="manager" %}
-                            <option value="manager" >Manager</option>
-                            <option value="staff">Staff</option>
-                        {% endif %}
 
-                        {% if user['role']!="manager" %}
-                            <option value="staff">Staff</option>
-                            <option value="manager" >Manager</option>
 
-                        {% endif %}
-
-                    </select>
 
                    <button type="submit" class="btn btn-lg btn-primary btn-block btnSub btnUserConfig" ><b>Update</b></button>
                             </center>
 
                </form>
 
+
             <center>
-                <a href="{{  url_for('userConfiguration')}}"><button class="btn btn-lg btn-primary btn-block btnSub btnUserConfig" ><b>Back</b></button>
+                <a href="{{  url_for('dashboard')}}"><button class="btn btn-lg btn-primary btn-block btnSub btnUserConfig" ><b>Back</b></button>
                          </a>
             </center>
 
@@ -231,32 +259,30 @@
 
   </div>
 
+
 <script>
 
 
-$('form[name="form-mem-update"]').submit(function (e){
+$('form').submit(function (e){
    var $form=$(this);
    var $error=$form.find(".error");
    var data=$form.serialize();
    $.ajax({
        url:"updateit",
-       type:"POST",
+       method:"POST",
        data:data,
-
        success:function (resp){
            var c=$('p[name="success"]');
            c.css("display","block");
-
-           var f=$('form[name="form-mem-update"]');
+           var f=$('form');
+            c.text("Updated Successfully");
            f.css("display","none");
-
-
            console.log(resp);
        },
        error:function(resp){
            var c=$('p[name="success"]');
            c.css("display","block");
-           c.text("Error");
+           c.text("Email or Username already exists");
            c.css("color","red");
            console.log(resp);
        }
@@ -267,7 +293,8 @@ e.preventDefault();
 
 
 });
-</script>
 
+
+</script>
   </body>
 </html>

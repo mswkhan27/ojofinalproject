@@ -129,7 +129,51 @@
             margin-bottom: 10px;
              border-radius: 50px !important;
         }
+ .dropWrap{
 
+            margin-bottom: 20px;
+        }
+        .dropbtn {
+
+          background-color: #68FE86;
+          color: #0F233B;
+          padding-left: 10px;
+          padding-right: 10px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          font-size: 16px;
+          border: dashed;
+
+        }
+
+        .dropdown {
+
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+            margin-left:5px !important;
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 4px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown-content a:hover {background-color: #68FE86;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .dropdown:hover .dropbtn {background-color: #68FE86;}
       </style>
   </head>
   <body>
@@ -158,11 +202,21 @@
               <span>Detected Activity Logs</span>
 
            </a>
-           <a href="logout" class="navbar-link">
-          <img src="{{  url_for('static',filename='images/qq.png') }}" width="34" height="34">
+           <div class="dropWrap">
+                <div class="dropdown">
+                  <button class="dropbtn"><span><img src="{{  url_for('static',filename='images/prof.png') }}" width="34" height="34"></span><strong> {{ user['name'] }}</strong></button>
+                      <div class="dropdown-content">
+                        <a href="updateDetails">
+                            <img src="{{  url_for('static',filename='images/updateicon.png') }}" width="14" height="14">
+                            Update Info</a>
+                        <a href="logout">
+                         <img src="{{  url_for('static',filename='images/qq.png') }}" width="14" height="14">
+                            <span>Sign out</span>
 
-
-          </a>
+                          </a>
+                      </div>
+                </div>
+            </div>
 
 
       </p>
@@ -184,7 +238,7 @@
                   </h3>
                    <center>
 
-                   <input type="text" id="email" name="email" class="form-control f1" placeholder="Email" required>
+                   <input type="email" id="email" name="email" class="form-control f1" placeholder="Email" required>
 
                        <input type="text" id="username" name="username" class="form-control f1" placeholder="Username" required>
 
@@ -214,7 +268,8 @@
 
 $('form[name="rem-mem-form"]').submit(function (e){
    var $form=$(this);
-
+   var email=$('input[name="email"]');
+   var username=$('input[name="username"]');
 
    var $error=$form.find(".error");
    var data=$form.serialize();
@@ -227,7 +282,8 @@ $('form[name="rem-mem-form"]').submit(function (e){
        success:function (resp){
            var c=$('p[name="success"]');
            c.css("display","block");
-
+           c.text("Removed Successfully!");
+           c.css("color","#68FE86");
            var f=$('form[name="rem-mem-form"]');
            f.css("display","none");
 
@@ -237,7 +293,9 @@ $('form[name="rem-mem-form"]').submit(function (e){
        error:function(resp){
            var c=$('p[name="success"]');
            c.css("display","block");
-           c.text("Error");
+           email.val("")
+           username.val("")
+           c.text("Username or Email doesn't exist");
            c.css("color","red");
            console.log(resp);
        }

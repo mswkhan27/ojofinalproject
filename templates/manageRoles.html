@@ -116,8 +116,7 @@
             color:white !important;
             background-color:#052240;
         }
-
-      .btnUserConfig{
+        .btnUserConfig{
             margin-top: 10px;
             color:#0D2139 !important;
             background-color:#68FE86;
@@ -125,6 +124,9 @@
             padding: 5px 0px;
             font-size:16px;
             border-radius: 50px !important;
+        }
+        .f1{margin-bottom: 10px;
+             border-radius: 50px !important;
         }
  .dropWrap{
 
@@ -184,7 +186,7 @@
     </div>
       <p class="navbar-text navbar-right">
 
-            <div class="dropWrap">
+          <div class="dropWrap" style="float: right">
                 <div class="dropdown">
                   <button class="dropbtn"><span><img src="{{  url_for('static',filename='images/prof.png') }}" width="34" height="34"></span><strong> {{ user['name'] }}</strong></button>
                       <div class="dropdown-content">
@@ -201,35 +203,53 @@
             </div>
 
 
-        </p>
+      </p>
 
   </div>
 </nav>
   <div class="container">
       <center>
 
-          <h3 style="color:white">
-              Video Evaluation
-          </h3>
-
-          <p>
-
-          <form id="upload-video" action="{{ url_for('result') }}" method="POST" enctype="multipart/form-data">
-          <input id="fileChoose" type="file" name="file" accept="video/*" >
-          <input id="fileSubmit"  type="submit" value="evaluate">
-          </form>
-          <h4 id="processing" style="display: none"><b>Processing..</b>.</h4>
- <br>
-          <p><span style="color:yellow">Instruction:</span> After uploading the File, click <b>*evaluate*</b> and <b>*wait for some seconds*</b> to load the results.</p>
-<br>
- <br>
-<a href="{{  url_for('dashboard')}}"><button class="btn btn-lg btn-primary btn-block btnSub btnUserConfig" ><b>Back</b></button>
-             </a>
-
-
-</div>
+<p style="color:#68FE86;display: none;font-size:20px" name="success">
+              Updated Successfully!
 
           </p>
+
+
+<div class="subContainer" style="width:250px">
+
+          <p>
+           <form class="form-mem-update1" method="POST" >
+
+            <h3 style="color:white">
+                      <b>Manage Roles</b>
+                  </h3>
+                   <center>
+                       <input type="text" id="username" name="username" class="form-control f1" placeholder="Username"  required>
+
+                   <select  id="role" name="role" class="form-control f1">
+
+                            <option value="manager" >Manager</option>
+                            <option value="staff">Staff</option>
+
+                    </select>
+
+                   <button type="submit" class="btn btn-lg btn-primary btn-block btnSub btnUserConfig" ><b>Update</b></button>
+                            </center>
+
+               </form>
+
+
+            <center>
+                <a href="{{  url_for('dashboard')}}"><button class="btn btn-lg btn-primary btn-block btnSub btnUserConfig" ><b>Back</b></button>
+                         </a>
+            </center>
+
+
+          </p>
+
+
+      </div>
 
 
       </center>
@@ -238,19 +258,45 @@
 
 
 <script>
-   $('#fileSubmit').click(function(){
-
-           document.getElementById("processing").style.display = "block";
 
 
-        });
+$('form').submit(function (e){
+   var $form=$(this);
+   var username=$('input[name="username"]');
+
+   var $error=$form.find(".error");
+   var data=$form.serialize();
+   $.ajax({
+       url:"roleUpdate",
+       method:"POST",
+       data:data,
+       success:function (resp){
+           var c=$('p[name="success"]');
+           c.css("display","block");
+           c.text("Updated Successfully");
+           c.css("color","#68FE86");
+           var f=$('form');
+           f.css("display","none");
+           console.log(resp);
+       },
+
+       error:function(resp){
+           var c=$('p[name="success"]');
+           c.css("display","block");
+           c.text("Invalid Username");
+           c.css("color","red");
+           username.val("");
+           console.log(resp);
+       }
+
+   });
+
+e.preventDefault();
+
+
+});
+
+
 </script>
-
-
-
-
-
   </body>
-
-
 </html>

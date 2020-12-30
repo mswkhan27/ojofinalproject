@@ -7,7 +7,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
       <link rel="script"href="{{  url_for('static',filename='formScript.js') }}"/>
-
+   <link rel="stylesheet" href="{{  url_for('static',filename='style.css') }}">
 
       <style>
 
@@ -128,7 +128,51 @@
         .f1{margin-bottom: 10px;
              border-radius: 50px !important;
         }
+        .dropWrap{
 
+            margin-bottom: 20px;
+        }
+        .dropbtn {
+
+          background-color: #68FE86;
+          color: #0F233B;
+          padding-left: 10px;
+          padding-right: 10px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          font-size: 16px;
+          border: dashed;
+
+        }
+
+        .dropdown {
+
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+              margin-left:5px !important;
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 4px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown-content a:hover {background-color: #68FE86;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .dropdown:hover .dropbtn {background-color: #68FE86;}
       </style>
   </head>
   <body>
@@ -157,11 +201,21 @@
               <span>Detected Activity Logs</span>
 
            </a>
-           <a href="logout" class="navbar-link">
-          <img src="{{  url_for('static',filename='images/qq.png') }}" width="34" height="34">
+           <div class="dropWrap">
+                <div class="dropdown">
+                  <button class="dropbtn"><span><img src="{{  url_for('static',filename='images/prof.png') }}" width="34" height="34"></span><strong> {{ user['name'] }}</strong></button>
+                      <div class="dropdown-content">
+                        <a href="updateDetails">
+                            <img src="{{  url_for('static',filename='images/updateicon.png') }}" width="14" height="14">
+                            Update Info</a>
+                        <a href="logout">
+                         <img src="{{  url_for('static',filename='images/qq.png') }}" width="14" height="14">
+                            <span>Sign out</span>
 
-
-          </a>
+                          </a>
+                      </div>
+                </div>
+            </div>
 
 
       </p>
@@ -186,7 +240,7 @@
                    <center>
 
                         <input type="text" id="fullName" name="name" class="form-control f1" placeholder="Full Name" required >
-                        <input type="text" id="email" name="email" class="form-control f1" placeholder="Email" required>
+                        <input type="email" id="email" name="email" class="form-control f1" placeholder="Email" required>
 
                          <input type="text" id="username" name="username" class="form-control f1" placeholder="Username" required>
 
@@ -242,17 +296,22 @@ $('form[name="add-mem-form"]').submit(function (e){
        success:function (resp){
            var c=$('p[name="success"]');
            c.css("display","block");
-
            var f=$('form[name="add-mem-form"]');
            f.css("display","none");
-
+           c.text("Added Successfully!");
+           c.css("color","#68FE86");
 
            console.log(resp);
        },
        error:function(resp){
+
            var c=$('p[name="success"]');
+           name.val("");
+           email.val("");
+           password.val("");
+           username.val("");
            c.css("display","block");
-           c.text("Error");
+           c.text("Username or Email Already exists");
            c.css("color","red");
            console.log(resp);
        }
