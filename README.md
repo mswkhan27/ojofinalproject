@@ -10,7 +10,5 @@ for running this system:
 -----
 
 Technologies:
-Bootstrap, jQuery, Flask, MongoDB
-Deep Learning Model
-YoloV3
+Bootstrap, jQuery, Flask, MongoDB, YoloV3,openCV
 
