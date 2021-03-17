@@ -7,11 +7,10 @@ for running this system:
 2) downloads the weights for yolov3 from google drive by running this command:
 "python weightsfile.py"
 3)run the app.py file.
+-----
 
 Technologies:
-# Web
 Bootstrap, jQuery, Flask, MongoDB
-
-#Deep Learning Model
+Deep Learning Model
 YoloV3
 
