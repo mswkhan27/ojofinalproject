@@ -1,7 +1,4 @@
 # OJO Smart Surveillance Detection System
-Technologies:
-Web: Bootstrap, jQuery, Flask, MongoDB
-Deep Learning Model: YoloV3
 
 OJO is a web-based surveillance detection system. OJO which means an “Eye” in Spanish is a project that aims to enhance the detection and prevention of crimes in organizations, like a company or bank, by exploiting the full potential of video-surveillance systems.
 for running this system:
@@ -10,3 +7,11 @@ for running this system:
 2) downloads the weights for yolov3 from google drive by running this command:
 "python weightsfile.py"
 3)run the app.py file.
+
+Technologies:
+# Web
+Bootstrap, jQuery, Flask, MongoDB
+
+#Deep Learning Model
+YoloV3
+
